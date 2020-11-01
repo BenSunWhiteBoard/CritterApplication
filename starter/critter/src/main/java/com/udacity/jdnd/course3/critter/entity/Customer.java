@@ -8,7 +8,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Customer extends User {
 
     private String phoneNumber;
