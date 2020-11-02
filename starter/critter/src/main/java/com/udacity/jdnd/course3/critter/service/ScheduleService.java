@@ -23,9 +23,8 @@ public class ScheduleService {
         return scheduleRepository.findAll();
     }
 
-    public Schedule getScheduleById(Long id){
-        Optional<Schedule> result = scheduleRepository.findById(id);
-        return result.orElse(null);
+    public List<Schedule> getScheduleForPet(Long petId){
+        return scheduleRepository.getScheduleForPet(petId);
     }
 
     public List<Schedule> getScheduleForEmployee(Long employeeId){

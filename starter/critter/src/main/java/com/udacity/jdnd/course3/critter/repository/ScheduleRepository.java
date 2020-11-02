@@ -16,4 +16,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT DISTINCT s FROM Schedule s LEFT JOIN Customer c ON c.id = :customerId")
     List<Schedule> getScheduleForCustomer(Long customerId);
 
+    @Query("SELECT DISTINCT s FROM Schedule s LEFT JOIN Pet p ON p.id = :petId")
+    List<Schedule> getScheduleForPet(Long petId);
+
 }

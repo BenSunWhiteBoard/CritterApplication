@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.DTO.EmployeeSkill;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,9 +18,9 @@ public class Schedule {
     @GeneratedValue
     private long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Employee> employees;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Pet> pets;
 
     private LocalDate date;
