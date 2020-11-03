@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
@@ -17,19 +18,48 @@ import javax.persistence.OneToMany;
 public class Pet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private PetType type;
+    private String name;
 
-    private PetType petType;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(targetEntity = Customer.class,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerid")
     private Customer customer;
 
     private LocalDate birthDate;
     private String notes;
 
     //getters and setters
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", customer=" + customer +
+                ", birthDate=" + birthDate +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
+
+    public PetType getType() {
+        return type;
+    }
+
+    public void setType(PetType type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }
@@ -39,11 +69,11 @@ public class Pet {
     }
 
     public PetType getPetType() {
-        return petType;
+        return type;
     }
 
     public void setPetType(PetType petType) {
-        this.petType = petType;
+        this.type = petType;
     }
 
     public Customer getCustomer() {

@@ -1,7 +1,10 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Pet;
+import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,13 @@ public class PetService {
     }
 
     public Pet savePet(Pet pet){
-        return petRepository.save(pet);
+        Pet savedPet = petRepository.save(pet);
+        Customer owner = pet.getCustomer();
+        if(owner.getPets() == null){
+            owner.setPets(new ArrayList<Pet>());
+        }
+        owner.getPets().add(savedPet);
+        return savedPet;
     }
 
     public List<Pet> getAllPetsByOwner(Long ownerId){

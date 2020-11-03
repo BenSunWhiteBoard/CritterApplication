@@ -14,6 +14,18 @@ public class PetDTO {
     private LocalDate birthDate;
     private String notes;
 
+    @Override
+    public String toString() {
+        return "PetDTO{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", ownerId=" + ownerId +
+                ", birthDate=" + birthDate +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
+
     public PetType getType() {
         return type;
     }

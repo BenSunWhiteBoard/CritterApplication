@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.controller;
 
-import com.udacity.jdnd.course3.critter.DTO.CustomerDTO;
 import com.udacity.jdnd.course3.critter.DTO.PetDTO;
 import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Pet;
@@ -34,6 +33,13 @@ public class PetController {
         return convertPetToPetDTO(pet);
     }
 
+    @PostMapping("/{ownerId}")
+    public PetDTO savePet(@RequestBody PetDTO petDTO,@PathVariable long ownerId) {
+        petDTO.setOwnerId(ownerId);
+        Pet pet = petService.savePet(convertPetDTOToPet(petDTO));
+        return convertPetToPetDTO(pet);
+    }
+
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
         return convertPetToPetDTO(petService.getPetById(petId));
@@ -42,16 +48,16 @@ public class PetController {
     @GetMapping
     public List<PetDTO> getPets() {
         List<Pet> petList = petService.getAllPets();
-        return getPetDTOS(petList);
+        return getPetDTOs(petList);
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
         List<Pet> petList = petService.getAllPetsByOwner(ownerId);
-        return getPetDTOS(petList);
+        return getPetDTOs(petList);
     }
 
-    private List<PetDTO> getPetDTOS(List<Pet> petList) {
+    private List<PetDTO> getPetDTOs(List<Pet> petList) {
         List<PetDTO> petDTOList = new ArrayList<PetDTO>();
         for (Pet pet : petList) {
             petDTOList.add(convertPetToPetDTO(pet));
@@ -72,7 +78,7 @@ public class PetController {
     private Pet convertPetDTOToPet(PetDTO petDTO) {
         Pet pet = new Pet();
         BeanUtils.copyProperties(petDTO, pet);
-        Customer owner = customerService.getOwnerByPetId(petDTO.getId());
+        Customer owner = customerService.findCustomerById(petDTO.getOwnerId());
         pet.setCustomer(owner);
         return pet;
     }
