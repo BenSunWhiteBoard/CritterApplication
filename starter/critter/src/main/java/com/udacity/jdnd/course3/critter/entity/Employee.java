@@ -26,6 +26,17 @@ public class Employee {
 
     //getters and setters
 
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", skills=" + skills +
+                ", daysAvailable=" + daysAvailable +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

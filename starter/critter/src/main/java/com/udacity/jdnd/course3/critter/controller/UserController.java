@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.udacity.jdnd.course3.critter.DTO.CustomerDTO;
 import com.udacity.jdnd.course3.critter.DTO.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.DTO.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.DTO.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Employee;
 import com.udacity.jdnd.course3.critter.entity.Pet;
@@ -11,6 +12,7 @@ import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import java.util.ArrayList;
+import java.util.Date;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,10 +87,17 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
+        DayOfWeek requiredDay = DayOfWeek.from(employeeDTO.getDate());
+        Set<EmployeeSkill> requiredSkills = employeeDTO.getSkills();
         List<Employee> employeeList = employeeService.getAllEmployee();
         List<EmployeeDTO> employeeDTOList = new ArrayList<EmployeeDTO>();
         for (Employee employee : employeeList) {
-            employeeDTOList.add(convertEmployeeToEmployeeDTO(employee));
+            System.out.println(requiredDay);
+            System.out.println(requiredSkills);
+            System.out.println(employee);
+            if (employee.getDaysAvailable().contains(requiredDay) && employee.getSkills().containsAll(requiredSkills)) {
+                employeeDTOList.add(convertEmployeeToEmployeeDTO(employee));
+            }
         }
         return employeeDTOList;
     }

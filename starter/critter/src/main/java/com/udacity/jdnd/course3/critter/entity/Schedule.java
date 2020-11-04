@@ -7,9 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -19,9 +22,10 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(targetEntity = Employee.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Employee.class, cascade = CascadeType.ALL)
     private List<Employee> employees;
-    @OneToMany(targetEntity = Pet.class, cascade = CascadeType.ALL)
+
+    @ManyToMany(targetEntity = Pet.class, cascade = CascadeType.ALL)
     private List<Pet> pets;
 
     private LocalDate date;

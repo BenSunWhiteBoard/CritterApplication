@@ -1,7 +1,12 @@
 package com.udacity.jdnd.course3.critter.controller;
 
 import com.udacity.jdnd.course3.critter.DTO.ScheduleDTO;
+import com.udacity.jdnd.course3.critter.entity.Employee;
+import com.udacity.jdnd.course3.critter.entity.Pet;
 import com.udacity.jdnd.course3.critter.entity.Schedule;
+import com.udacity.jdnd.course3.critter.service.CustomerService;
+import com.udacity.jdnd.course3.critter.service.EmployeeService;
+import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.ScheduleService;
 import java.util.ArrayList;
 import org.springframework.beans.BeanUtils;
@@ -17,9 +22,15 @@ import java.util.List;
 public class ScheduleController {
 
     private ScheduleService scheduleService;
+    private EmployeeService employeeService;
+    private PetService petService;
 
-    public ScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleService scheduleService,
+            EmployeeService employeeService,
+            PetService petService) {
         this.scheduleService = scheduleService;
+        this.employeeService = employeeService;
+        this.petService = petService;
     }
 
     @PostMapping
@@ -64,12 +75,36 @@ public class ScheduleController {
     private ScheduleDTO convertScheduleToScheduleDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         BeanUtils.copyProperties(schedule, scheduleDTO);
+        List<Long> petIds = new ArrayList<>();
+        List<Long> employeeIds = new ArrayList<>();
+        for (Pet pet : schedule.getPets()) {
+            petIds.add(pet.getId());
+        }
+        for (Employee employee : schedule.getEmployees()) {
+            employeeIds.add(employee.getId());
+        }
+        scheduleDTO.setPetIds(petIds);
+        scheduleDTO.setEmployeeIds(employeeIds);
         return scheduleDTO;
     }
 
     private Schedule convertScheduleDTOTOSchedule(ScheduleDTO scheduleDTO) {
         Schedule schedule = new Schedule();
         BeanUtils.copyProperties(scheduleDTO, schedule);
+        List<Pet> petList = new ArrayList<>();
+        List<Employee> employeeList = new ArrayList<>();
+        if(scheduleDTO.getPetIds()!=null){
+            for (Long petId : scheduleDTO.getPetIds()) {
+                petList.add(petService.getPetById(petId));
+            }
+        }
+        if(scheduleDTO.getEmployeeIds()!=null){
+            for (Long employeeId : scheduleDTO.getEmployeeIds()) {
+                employeeList.add(employeeService.getEmployeeById(employeeId));
+            }
+        }
+        schedule.setPets(petList);
+        schedule.setEmployees(employeeList);
         return schedule;
     }
 }
